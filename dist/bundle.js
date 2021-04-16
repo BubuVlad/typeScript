@@ -1,0 +1,1 @@
+(()=>{"use strict";var e=new function(){this.name="Vlad",this.age=36};console.log(e)})();
