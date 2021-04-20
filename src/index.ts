@@ -2,8 +2,7 @@ import { addFormProduct, getDataAndCreateInitialList } from "./scripts/controlle
 
 
 getDataAndCreateInitialList();
+
 const addButton = document.getElementById('add-btn');
+
 addButton.addEventListener('click', addFormProduct)
-
-
-// populateDom(list, 'productList');

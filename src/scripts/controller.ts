@@ -32,7 +32,6 @@ function getValueInput (data:NodeListOf<Element>):ProductData {
   return objTemplate;
 }
 
-
 //GET LocalStorage data
 function getDataAndCreateInitialList () {
   // const list = new ProductList();
