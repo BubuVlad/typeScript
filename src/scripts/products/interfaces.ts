@@ -1,4 +1,4 @@
-interface ProductProps {
+export interface ProductProps {
   id: number;
   name: string;
   image: string;
@@ -6,4 +6,6 @@ interface ProductProps {
   type: string;
 }
 
-export { ProductProps}
+export interface ProductData {
+  [key:string]: string 
+}
