@@ -22,7 +22,10 @@ function blockTemplate (item: Product) {
 
 function populateDom(listOfItems: ProductList, productsContainer: string) {
   const container = document.getElementById(productsContainer)
+  //Reset content of container
+  container.innerHTML = "";
+  //Populate with products
   listOfItems.items.forEach((el: Product) => {container.appendChild(blockTemplate(el))});
 }
 
-export {blockTemplate, populateDom}
+export { blockTemplate, populateDom }
