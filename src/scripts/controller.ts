@@ -32,7 +32,6 @@ function getValueInput (data:NodeListOf<Element>):ProductData {
   return objTemplate;
 }
 
-
 //GET LocalStorage data
 function getDataAndCreateInitialList () {
   // const list = new ProductList();
@@ -50,13 +49,31 @@ function getDataAndCreateInitialList () {
     allProductList.addItem(product)
   });
 
-  populateDom(allProductList, 'productList');
+  populateDom(allProductList, 'productList', removeProduct);
+}
+
+
+//Update dom and localstorage
+function updateLocalstorageAndRender () {
+   //update LocalStorage
+   localStorage.clear();
+   localStorage.setItem('products', JSON.stringify(allProductList.items))
+ 
+   //update View
+   populateDom(allProductList, 'productList', removeProduct);
+}
+
+//Remove Product
+function removeProduct(item:Product) {
+  console.log('removing: ', item);
+  allProductList.removeItem(item);
+  updateLocalstorageAndRender();
 }
 
 // Add the product from form
-function addFormProduct () {
+function addFormProduct (targets:NodeListOf<Element>) {
 
-  const formFields = document.querySelectorAll('.form-product input');
+  const formFields = targets;
   let newObjData:ProductData;
   const isValid = validateAddFormData(formFields);
   if (isValid) {
@@ -72,19 +89,15 @@ function addFormProduct () {
       description: newObjData.description,
       type: newObjData.type,
     }))
+
+  updateLocalstorageAndRender();
+
+  location.reload()
+  
   } else {
     //show user error
     prompt ('Please fill all fields')
   }
-
-  //update LocalStorage
-  localStorage.clear();
-  localStorage.setItem('products', JSON.stringify(allProductList.items))
-  console.log('List: ', allProductList)
-
-
-  //update View
-  populateDom(allProductList, 'productList');
 }
 
-export { validateAddFormData, getValueInput, getDataAndCreateInitialList, addFormProduct }
+export { validateAddFormData, getValueInput, getDataAndCreateInitialList, addFormProduct, allProductList }
