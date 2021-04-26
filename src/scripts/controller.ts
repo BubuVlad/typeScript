@@ -1,40 +1,17 @@
-import { ProductData, ProductProps } from "./products/interfaces";
+import { ProductProps, ProductViewData } from "./products/interfaces";
 import { Product } from "./products/product";
 import { ProductList } from "./products/product_List";
-import { populateDom } from "./view";
+import { populateDom, renderNewProduct } from "./view";
 
 const allProductList = new ProductList()
 
-//VALIDATOR
-function validateAddFormData (data:NodeListOf<Element>):Boolean {
-  let result = true;
-
-  data.forEach((el:HTMLInputElement) => {
-    console.log('validateAdd', el)
-    if(el.value === '') {
-      result = false;
-    }
-  })
-
-  return result
-}
-
-//Get Value Input from Form
-function getValueInput (data:NodeListOf<Element>):ProductData {
-  let objTemplate:ProductData = {};
-  data.forEach((el:HTMLInputElement) => {
-
-    let propName = el.name;
-
-    objTemplate[propName] = el.value
-  })
-
-  return objTemplate;
+function appInit() {
+  getDataAndCreateInitialList();
+  addFormProduct()
 }
 
 //GET LocalStorage data
 function getDataAndCreateInitialList () {
-  // const list = new ProductList();
 
   //Bring localStorage
   const dataProdFromLocalStorage = JSON.parse(localStorage.getItem('products'));
@@ -49,7 +26,7 @@ function getDataAndCreateInitialList () {
     allProductList.addItem(product)
   });
 
-  populateDom(allProductList, 'productList', removeProduct);
+  populateDom(allProductList, removeProduct);
 }
 
 
@@ -60,44 +37,39 @@ function updateLocalstorageAndRender () {
    localStorage.setItem('products', JSON.stringify(allProductList.items))
  
    //update View
-   populateDom(allProductList, 'productList', removeProduct);
+   populateDom(allProductList, removeProduct);
 }
 
 //Remove Product
 function removeProduct(item:Product) {
-  console.log('removing: ', item);
   allProductList.removeItem(item);
   updateLocalstorageAndRender();
 }
 
-// Add the product from form
-function addFormProduct (targets:NodeListOf<Element>) {
 
-  const formFields = targets;
-  let newObjData:ProductData;
-  const isValid = validateAddFormData(formFields);
-  if (isValid) {
-
-    //Create new Product
-    newObjData = getValueInput(formFields);
-
-    // instantiate and send data
-    allProductList.addItem(new Product({
-      name: newObjData.name,
-      id: allProductList.items.length + 1,
-      image: newObjData.image,
-      description: newObjData.description,
-      type: newObjData.type,
-    }))
-
-  updateLocalstorageAndRender();
-
-  location.reload()
-  
-  } else {
-    //show user error
-    prompt ('Please fill all fields')
-  }
+//todo move to an Utils place
+function getRandomId() {
+  const rand = Math.random();
+  return Math.floor(rand * 10000);
 }
 
-export { validateAddFormData, getValueInput, getDataAndCreateInitialList, addFormProduct, allProductList }
+function createProduct(productData: ProductViewData) : void  {
+  const { name, description, type, image }  = productData;
+  const newProduct =  new Product({
+    id: getRandomId(),
+    name,
+    description,
+    type,
+    image
+  })
+
+  allProductList.addItem(newProduct);
+  updateLocalstorageAndRender();
+}
+
+// Add the product from form
+function addFormProduct () {
+  renderNewProduct(createProduct);
+}
+
+export { appInit }
