@@ -15,7 +15,7 @@ export class ProductList {
     }
   }
   removeItem (product: Product) {
-    this._items.splice(this._items.indexOf(product), 1)[0]
+    this._items.splice(this._items.indexOf(product), 1)
   }
   get items() {
     return this._items

@@ -6,6 +6,9 @@ export interface ProductProps {
   type: string;
 }
 
-export interface ProductData {
-  [key:string]: string 
+export interface ProductViewData {
+  name: string;
+  image: string;
+  description: string;
+  type: string;
 }
